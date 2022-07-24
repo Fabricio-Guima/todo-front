@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar toggleable="lg" type="dark" variant="primary">
       <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -15,6 +15,7 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item to="/">Home</b-nav-item>
           <b-nav-item to="/todos">Todos</b-nav-item>
+          <b-nav-item to="/doLogin">Login</b-nav-item>
           <b-nav-item to="/profile">Create Todo</b-nav-item>
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
@@ -22,7 +23,9 @@
               <em>{{ user.name }}</em>
             </template>
             <b-dropdown-item to="/profile">Profile</b-dropdown-item>
-            <b-dropdown-item @click.prevent.stop="logout">Sign Out</b-dropdown-item>
+            <b-dropdown-item @click.prevent.stop="logout"
+              >Sign Out</b-dropdown-item
+            >
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -45,7 +48,11 @@ export default {
       this.$router.push({ name: "login" });
     },
   },
+  created() {
+    console.log("user", user);
+  },
 };
 </script>
 
-<style></style>
+<style>
+</style>

@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     url() {
-      return `/todos?page=${Number(this.$route.query.page)}`;
+      return `/admin/todos?page=${Number(this.$route.query.page)}`;
     },
     yesOrNo() {
       return (param) => (param ? "sim" : "não");

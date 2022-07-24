@@ -90,7 +90,6 @@
 </template>
 
 <script>
-// import Cookie from "js-cookie";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
@@ -133,9 +132,7 @@ export default {
 
       this.$axios
         .post("/users/create", payload)
-        .then((response) => {
-          console.log(response);
-
+        .then((response) => {  
           this.response.color = "success";
           this.response.message =
             "Seu cadastro foi feito com sucesso. Seja bem vindo(a)";

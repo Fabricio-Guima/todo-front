@@ -137,8 +137,7 @@ export default {
 
       this.$axios
         .put(`/tasks/${this.task.id}`, payload)
-        .then((response) => {
-          console.log(response);
+        .then((response) => {         
           this.$emit("loadTasks");
         })
         .catch((e) => {
@@ -150,8 +149,7 @@ export default {
         });
 
       //fechar a modal
-      this.hideModal(modalId);
-      console.log("payload", payload);
+      this.hideModal(modalId);     
     },
   },
   created() {

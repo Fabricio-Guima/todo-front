@@ -9,8 +9,7 @@ axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 
 axios.interceptors.request.use(function(config) {
-  const token = Cookie.getToken();
-  console.log('existe token')
+  const token = Cookie.getToken(); 
 
   if (token) {
     config.headers.common["Authorization"] = token;

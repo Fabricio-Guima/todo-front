@@ -2,13 +2,17 @@
   <div>
     <transition>
       <div class="container" v-if="tasks && tasks.length" key="hasTask">
-        <div class="row justify-content-between align-items-center px-3">          
-            <h1>Tasks</h1>  
-            <b-button class="bg-primary" v-b-modal.modal-create-task
-              >Criar Task</b-button
-            >
-            <ModalCreateTask @loadTasks="getTasks" />         
-        </div>
+        <h1>Tasks</h1>
+        <b-form-group label="Filtra por:" v-slot="{ ariaDescribedby }">
+          <b-form-radio-group
+            id="radio-group-1"
+            v-model="selected"
+            :options="options"
+            :aria-describedby="ariaDescribedby"
+            name="radio-options"
+          ></b-form-radio-group>
+          <!-- nao deu tempo de fazer o filtro : ( -->
+        </b-form-group>
         <div class="row">
           <div
             v-for="(task, index) in tasks"
@@ -17,6 +21,11 @@
           >
             <div class="card" style="">
               <div class="p-1 bg-primary">
+                <p class="text-white font-weight-bold">
+                  Email do usuário:<span class="text-white ml-1">{{
+                    task.todo.user.email
+                  }}</span>
+                </p>
                 <p class="text-white font-weight-bold">
                   Finalizado: <span>{{ yesOrNo(task.done) }}</span>
                 </p>
@@ -38,13 +47,21 @@
                   {{ task.description }}
                 </p>
 
-                <ModalEdit :task="task" @loadTasks="getTasks"/>
-                <ModalDelete :id="task.id" @loadTasks="getTasks"/>
+                <ModalEdit :task="task" @loadTasks="getTasks" />
+                <ModalDelete :id="task.id" @loadTasks="getTasks" />
               </div>
 
               <div class="card-footer">
-                <b-button class="float-left mr-3 bg-warning" v-b-modal="`modal-${task.id}`">Edit</b-button>
-                <b-button class="float-left bg-danger" v-b-modal="`modal-delete-${task.id}`">Deletar</b-button>
+                <b-button
+                  class="float-left mr-3 bg-warning"
+                  v-b-modal="`modal-${task.id}`"
+                  >Edit</b-button
+                >
+                <b-button
+                  class="float-left bg-danger"
+                  v-b-modal="`modal-delete-${task.id}`"
+                  >Deletar</b-button
+                >
                 <p class="float-right mr-3">
                   <strong>Criado em:</strong> {{ formatDate(task.created_at) }}
                 </p>
@@ -66,12 +83,8 @@
         v-else-if="tasks && tasks.length === 0"
         key="hasNoProduct"
       >
-        <div class="row flex-column">
-          <h2 class="text-center">Não há tasks a serem visualizadas</h2>
-          <b-button class="bg-primary" v-b-modal.modal-create-task
-              >Criar Task</b-button
-            >
-            <ModalCreateTask @loadTasks="getTasks" />
+        <div class="row">
+          <h2>Não há tasks a serem visualizadas</h2>
         </div>
       </div>
 
@@ -88,14 +101,12 @@
 import Pagination from "@/components/Pagination";
 import ModalEdit from "@/components/ModalEdit.vue";
 import ModalDelete from "@/components/ModalDelete.vue";
-import ModalCreateTask from "@/components/ModalCreateTask.vue";
 
 export default {
   components: {
     Pagination,
     ModalEdit,
     ModalDelete,
-    ModalCreateTask
   },
   props: ["id"],
   data() {
@@ -104,11 +115,17 @@ export default {
       totalItems: 0,
       showModal: false,
       footer: "white",
+      filter: false,
+      options: [
+        { text: "Sem Filtro", value: "" },
+        { text: "Atrasado", value: "late" },
+        { text: "Não atrasado", value: "notLate" },
+      ],
     };
   },
   computed: {
     url() {
-      return `/todos/${this.id}/tasks?page=${Number(this.$route.query.page)}`;
+      return `/admin/tasks?page=${Number(this.$route.query.page)}`;
     },
     yesOrNo() {
       return (param) => (param ? "sim" : "não");
@@ -130,8 +147,9 @@ export default {
   },
   methods: {
     getTasks() {
-      this.tasks = null;   
-      this.$axios.get(this.url).then((response) => {      
+      this.tasks = null;
+      this.$axios.get(this.url).then((response) => {
+        console.log("task com todo", response.data);
         this.tasks = response.data.data;
         this.totalItems = Number(response.data.meta.total);
       });

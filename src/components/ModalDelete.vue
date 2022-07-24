@@ -70,8 +70,7 @@ export default {
 
       this.$axios
         .delete(`/tasks/${this.id}`, payload)
-        .then((response) => {
-          console.log(response);
+        .then((response) => {         
           this.$emit("loadTasks");
         })
         .catch((e) => {

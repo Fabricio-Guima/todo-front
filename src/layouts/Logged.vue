@@ -1,15 +1,22 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar toggleable="lg" type="dark" variant="primary">
       <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item to="/">Home</b-nav-item>
+          <b-nav-item to="/">Home</b-nav-item>         
+          <b-nav-item-dropdown v-if="user.isAdmin">
+            <!-- Using 'button-content' slot -->
+            <template #button-content>
+              <em>Admin</em>
+            </template>
+            <b-dropdown-item to="/admin/todos">Todos</b-dropdown-item>
+            <b-dropdown-item to="/admin/tasks">Tasks</b-dropdown-item>           
+          </b-nav-item-dropdown>
           <b-nav-item to="/todos">Todos</b-nav-item>
-          <b-nav-item to="/profile">Create Todo</b-nav-item>
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template #button-content>
@@ -42,7 +49,6 @@ export default {
       this.$axios
         .post("/auth/logout")
         .then((response) => {
-          console.log("deslogado", response);
           Cookie.deleteToken();
           this.$store.commit("user/STORE_USER_LOGGED", false);
           this.$router.push({ name: "login" });

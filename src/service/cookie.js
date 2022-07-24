@@ -3,8 +3,7 @@ import Cookie from "js-cookie";
 const TOKEN_NAME = "token";
 
 export default {
-  setToken(token) {
-    console.log('cookie token', token)
+  setToken(token) {   
     Cookie.set(TOKEN_NAME, token, { expires: 30 });
   },
 

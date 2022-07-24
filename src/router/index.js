@@ -78,6 +78,43 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/admin",
+    beforeEnter: Guard.redirectIfNotAuthenticated,
+    component: () =>
+      import(/* webpackChunkName: "adm.todos" */ "../layouts/Logged.vue"),   
+    children: [
+      {
+        path: "todos",
+        name: "admin.todos",
+        component: () =>
+          import(/* webpackChunkName: "adm.todos" */ "../views/admin/Todos.vue"),
+        props: true,
+      },
+      {
+        path: "tasks",
+        name: "admin.tasks",
+        component: () =>
+          import(/* webpackChunkName: "adm" */ "../views/admin/Task.vue"),
+        props: true,
+      },
+    ],
+  },
+  {
+    path: "/profile",
+    beforeEnter: Guard.redirectIfNotAuthenticated,
+    component: () =>
+      import(/* webpackChunkName: "profile" */ "../layouts/Logged.vue"),   
+    children: [
+      {
+        path: "",
+        name: "profile",
+        component: () =>
+          import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
+        props: true,
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

@@ -4,8 +4,7 @@ import store from "@/store";
 
 export default {
   async redirectIfNotAuthenticated(to, from, next) {
-    const token = Cookie.getToken();
-    console.log('tem token no middleware?', token)
+    const token = Cookie.getToken();    
     if (!token) {
       next({ name: "login" });
       return
@@ -17,9 +16,8 @@ export default {
 
     await axios
       .get("/auth/me")
-      .then((response) => {
-        console.log('me', response)
-        console.log('tem response do me no middleware?', response)
+      .then((response) => {      
+       
         if (!store?.state?.user?.id) {
          
           store.commit("user/STORE_USER", response.data.data);

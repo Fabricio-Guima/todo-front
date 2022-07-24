@@ -12,8 +12,7 @@ export default {
   }),
   
   mutations: {
-    STORE_USER(state, payload) {
-      console.log('user mutation', payload)
+    STORE_USER(state, payload) {     
       state.user = payload;
     },
    
@@ -21,8 +20,7 @@ export default {
       state.teste.measures = payload
     },
 
-    STORE_USER_LOGGED(state, payload) {
-      console.log('user logged mutation', payload)
+    STORE_USER_LOGGED(state, payload) {     
       state.userLogged = payload
     }
   },
