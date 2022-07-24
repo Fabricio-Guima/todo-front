@@ -36,10 +36,7 @@
       </b-form-group>
     </b-form>
 
-    <template #modal-footer>
-      <div class="w-100">
-       
-        <p><strong>Tarefa concluída: {{yesOrNo(task.done)}}</strong></p>
+     <p><strong>Tarefa concluída: {{yesOrNo(task.done)}}</strong></p>
         <b-form-checkbox       
           class="float-left"
           v-model="taskClone.done"
@@ -47,6 +44,11 @@
           size="lg"
           > <span class="text-size">Concluir Tarefa</span></b-form-checkbox
         >       
+
+    <template #modal-footer>
+      <div class="w-100">  
+        <p><strong>Criado em:</strong> {{formatDate(task.created_at)}}</p>
+        <p><strong>Atualizado em:</strong> {{formatDate(task.updated_at)}}</p>
         <b-button
           class="float-right ml-2"
           size="sm"
@@ -75,7 +77,7 @@
         </b-button>
       </div>
     </template>
-    {{ taskClone }}
+   
   </b-modal>
 </template>
 
@@ -100,6 +102,13 @@ export default {
      yesOrNo() {
       return (param) => (param ? "sim" : "não");
     },
+
+    formatDate() {
+        return (param) => {
+            let date = new Date(param)
+            return date.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+        }
+    }
   },
   methods: {
     hideModal(modalId) {
@@ -121,7 +130,7 @@ export default {
       this.spinner.edit = true;
 
       const payload = {
-        done: true,
+        done: this.taskClone.done,
         description: this.taskClone.description,
         ends_at: `${this.date} ${this.time}`,
       };

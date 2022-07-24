@@ -94,8 +94,8 @@ export default {
       return (param) => {
         let splitedDate = param.split(" ");
         return Date.parse(splitedDate[0]) > Date.now()
-          ? "dentro do prazo"
-          : "fora do prazo";
+          ? "Não Atrasado"
+          : "Atrasado";
       };
     },
     
