@@ -38,6 +38,15 @@
 
     <template #modal-footer>
       <div class="w-100">
+       
+        <p><strong>Tarefa concluída: {{yesOrNo(task.done)}}</strong></p>
+        <b-form-checkbox       
+          class="float-left"
+          v-model="taskClone.done"
+          switch
+          size="lg"
+          > <span class="text-size">Concluir Tarefa</span></b-form-checkbox
+        >       
         <b-button
           class="float-right ml-2"
           size="sm"
@@ -82,10 +91,16 @@ export default {
     taskClone: {},
     time: "",
     date: "",
+    teste: false,
     spinner: {
       edit: false,
     },
   }),
+  computed: {
+     yesOrNo() {
+      return (param) => (param ? "sim" : "não");
+    },
+  },
   methods: {
     hideModal(modalId) {
       this.spinner.edit = false;
@@ -106,7 +121,7 @@ export default {
       this.spinner.edit = true;
 
       const payload = {
-        done: false,
+        done: true,
         description: this.taskClone.description,
         ends_at: `${this.date} ${this.time}`,
       };
@@ -115,7 +130,7 @@ export default {
         .put(`/tasks/${this.task.id}`, payload)
         .then((response) => {
           console.log(response);
-          this.$emit('loadTasks')
+          this.$emit("loadTasks");
         })
         .catch((e) => {
           this.spinner.login = false;
@@ -123,7 +138,6 @@ export default {
         })
         .finally(() => {
           this.spinner.login = false;
-          
         });
 
       //fechar a modal
@@ -135,6 +149,10 @@ export default {
     if (this.task) {
       this.taskClone = structuredClone(this.task);
       let splitedDate = this.taskClone.ends_at.split(" ");
+      // checkbox do boostrap nao entende 0 ou 1 kkk
+      this.taskClone.done
+        ? (this.taskClone.done = true)
+        : (this.taskClone.done = false);
       this.date = splitedDate[0];
       this.time = splitedDate[1];
     }
@@ -142,4 +160,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+
+.text-size {
+    font-size: 1rem;
+}
+</style>
