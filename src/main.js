@@ -12,9 +12,13 @@ import "@/plugins/axios";
 
 import Loading from "@/components/Loading";
 
+import Vue2Filters from "vue2-filters";
+
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.component("Loading", Loading);
+
+Vue.use(Vue2Filters);
 
 
 new Vue({
