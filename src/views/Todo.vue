@@ -29,20 +29,29 @@
               <div class="card-body">
                 <span class="font-weight-bold"> Descrição: </span>
                 <p class="card-text">
-                  {{ task.description  }}
+                  {{ task.description }}
                 </p>
 
                 <ModalEdit :task="task" @loadTasks="getTasks"/>
+                <ModalDelete :id="task.id" @loadTasks="getTasks"/>
               </div>
 
               <div class="card-footer">
-                <b-button v-b-modal="`modal-${task.id}`">Edit</b-button>
+                <b-button class="float-left mr-3 bg-warning" v-b-modal="`modal-${task.id}`">Edit</b-button>
+                 <b-button class="float-left bg-danger" v-b-modal="`modal-delete-${task.id}`">Deletar</b-button>
+                <p class="float-right mr-3">
+                  <strong>Criado em:</strong> {{ formatDate(task.created_at) }}
+                </p>
+                <p class="float-right mr-3">
+                  <strong>Atualizado em:</strong>
+                  {{ formatDate(task.updated_at) }}
+                </p>
               </div>
             </div>
           </div>
         </div>
         <div class="row justify-content-center mt-5">
-          <Pagination :totalItems="totalItems"  />
+          <Pagination :totalItems="totalItems" />
         </div>
       </div>
 
@@ -67,12 +76,14 @@
 
 <script>
 import Pagination from "@/components/Pagination";
-import ModalEdit from "@/components/ModalEdit.vue"
+import ModalEdit from "@/components/ModalEdit.vue";
+import ModalDelete from "@/components/ModalDelete.vue";
 
 export default {
   components: {
     Pagination,
-    ModalEdit
+    ModalEdit,
+    ModalDelete
   },
   props: ["id"],
   data() {
@@ -80,7 +91,7 @@ export default {
       tasks: [],
       totalItems: 0,
       showModal: false,
-      footer: "white",     
+      footer: "white",
     };
   },
   computed: {
@@ -98,12 +109,17 @@ export default {
           : "Atrasado";
       };
     },
-    
+    formatDate() {
+      return (param) => {
+        let date = new Date(param);
+        return date.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+      };
+    },
   },
   methods: {
     getTasks() {
       this.tasks = null;
-      console.log('loadTasks kkkkkkkkkkk')
+      console.log("loadTasks kkkkkkkkkkk");
 
       this.$axios.get(this.url).then((response) => {
         console.log("tasks", response.data.data);
@@ -111,7 +127,7 @@ export default {
         this.totalItems = Number(response.data.meta.total);
       });
     },
-    hideModal(modalId) {        
+    hideModal(modalId) {
       this.$root.$emit("bv::hide::modal", modalId);
     },
   },
